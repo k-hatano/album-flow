@@ -12,11 +12,7 @@ function initialize() {
 function loadTopSongs(callback) {
   const request = new XMLHttpRequest();
   request.addEventListener("load", callback);
-  let url = TOPSONGS_URL;
-  if (location.href.indexOf("https://") == 0) {
-    url = url.replace("http://", "https://");
-  }
-  request.open("GET", url);
+  request.open("GET", TOPSONGS_URL);
   request.send();
 }
 
