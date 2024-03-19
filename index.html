@@ -5,10 +5,24 @@
     <title>Album Flow</title>
     <meta name="theme-color" content="#333" />
     <meta name="viewport" content="initial-scale=1,minimum-scale=0.25" />
-    <script type="text/javascript" charset="utf-8" src="jquery-3.7.1.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.js"></script>
+    <script type="text/javascript" charset="utf-8" src="coverflow/jquery.coverflow.js"></script>
+    <script type="text/javascript" src="coverflow/reflection.js"></script>
   </head>
   <body>
-    <div id="result"></div>
+    <div id="container">
+      <div id="loading">
+        <div id="loading-container">
+          <div class="lds-spinner">
+            <div></div><div></div><div></div><div></div><div></div><div></div>
+            <div></div><div></div><div></div><div></div><div></div><div></div>
+          </div>
+        </div>
+      </div>
+      <div id="result" class="coverflow"></div>
+    </div>
+    <span id="chart_title"></span>
     <script type="text/javascript" charset="utf-8" src="script.js"></script>
   </body>
 </html>

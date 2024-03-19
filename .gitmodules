@@ -1,0 +1,3 @@
+[submodule "coverflow"]
+	path = coverflow
+	url = https://github.com/vanderlee/coverflow.git
