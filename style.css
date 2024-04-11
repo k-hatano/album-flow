@@ -9,6 +9,7 @@ div#container {
   position: fixed;
   width: 100%;
   height: 100%;
+  overflow-y: hidden;
 }
 
 div#loading {
@@ -44,6 +45,7 @@ div.cover {
   top: 2vh;
   font-size: large;
   color: #FFFFFF;
+  max-width: 55vw;
 }
 
 .song_title {
@@ -73,6 +75,7 @@ select#storefront {
   right: 2vh;
   top: 2vh;
   font-size: large;
+  max-width: 40vw;
 }
 
 /* Source from: https://loading.io/css/ */ 
