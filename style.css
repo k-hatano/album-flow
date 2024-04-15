@@ -20,15 +20,15 @@ div#loading {
 
 div#result {
   display: table-cell;
-  position: absolute;
+  position: fixed;
   text-align: center;
   vertical-align: top;
 	color: #FFF;
   overflow: hidden;
   padding-top: calc(max((100vh - 50vw)/2, 12.5vh));
   background: #000;
-  width: 100vw;
-  min-height: 100vh;
+  width: 100%;
+  min-height: 100%;
 }
 
 div#result img {
@@ -62,8 +62,9 @@ div.cover {
   position: absolute;
   color: #FFFFFF;
   width: 100%;
-  bottom: max(calc(50vh - 25vw - 4em), 4em);
+  bottom: max(calc(50vh - 25vw - 5em), 5em);
   text-align: center;
+  z-index: 1;
 }
 
 .title a {

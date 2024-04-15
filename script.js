@@ -1,6 +1,6 @@
 
-const TOPSONGS_URL_HTTPS = "https://itunes.apple.com/us/rss/topsongs/country=us/cc=us/l=us/limit=50/xml";
-const TOPSONGS_URL = "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topsongs/country=us/cc=us/l=us/limit=50/xml";
+const TOPSONGS_URL_HTTPS = "https://itunes.apple.com/us/rss/topsongs/country=us/cc=us/l=us/limit=10/xml";
+const TOPSONGS_URL = "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topsongs/country=us/cc=us/l=us/limit=10/xml";
 
 const STOREFRONT_MAPPING_PATH = "2208578ba151d1d7c4edeeda15b4e9b1/storefrontmappings.json";
 
@@ -9,10 +9,12 @@ const STOREFRONT_MAPPING_PATH = "2208578ba151d1d7c4edeeda15b4e9b1/storefrontmapp
 let SF = undefined;
 let L = undefined;
 
+let gLimit = 10;
+
 onload = _ => {
   initialize();
-  loadTopSongs(result => {
-    loadedTopSongs(result);
+  loadTopSongs(0, result => {
+    loadedTopSongs(0, result);
     updateCoverFlow();
   });
 };
@@ -50,10 +52,11 @@ function initialize() {
 }
 
 function storefrontChanged(event) {
+  gLimit = 10;
   SF = event.target.value;
   L = $("select#storefront option:selected").attr("name").toLowerCase();
-  loadTopSongs(result => {
-    loadedTopSongs(result);
+  loadTopSongs(0, result => {
+    loadedTopSongs(0, result);
     updateCoverFlow();
   });
 }
@@ -72,9 +75,11 @@ function loadStorefrontMappings(callback) {
   });
 }
 
-function loadTopSongs(callback) {
-  $("#loading").attr('class', '');
-  $("div.cover").remove();
+function loadTopSongs(appendFrom, callback) {
+  if (appendFrom == 0) {
+    $("div.cover").remove();
+    $("#loading").attr('class', '');
+  }
 
   let url = TOPSONGS_URL;
   if (location.href.indexOf('https://') == 0) {
@@ -90,6 +95,10 @@ function loadTopSongs(callback) {
       url = url.replace("us", L);
     }
   }
+  if (gLimit > 10) {
+    url = url.replace("/limit=10/", "/limit=" + gLimit + "/");
+  }
+  console.log(url);
 
   jQuery.ajax({
     crossDomain:true,
@@ -102,12 +111,16 @@ function loadTopSongs(callback) {
   });
 }
 
-function loadedTopSongs(result) {
+function loadedTopSongs(appendFrom, result) {
+  console.dir(result);
   $("#loading").attr('class', 'hidden');
   let title = result.getElementsByTagName('title');
   $('#chart_title').text(title[0].textContent);
   const entries = result.getElementsByTagName('entry');
   for (let i = 0; i < entries.length; i++) {
+    if (i < appendFrom) {
+      continue;
+    }
     let imgElem = $('<img></img>');
     let coverElem = $('<div class="cover"></div>');
     let anchorElem = $('<a></a>').attr('target', '_blank');
@@ -131,12 +144,27 @@ function loadedTopSongs(result) {
     $('#result').append(coverElem);
   }
   $('.coverflow').coverflow({
-    index: 0,
-    select: function() {
+    select: function(e) {
       updateCoverFlow();
+      if (e.target.__coverflow_frame == gLimit - 3) {
+        gLimit += 10;
+        console.log(gLimit);
+        loadTopSongs(gLimit - 10, result => {
+          loadedTopSongs(gLimit - 10, result);
+          updateCoverFlow();
+        });
+      }
     },
-    change: function() {
+    change: function(e) {
       updateCoverFlow();
+      if (e.target.__coverflow_frame == gLimit - 3) {
+        gLimit += 10;
+        console.log(gLimit);
+        loadTopSongs(gLimit - 10, result => {
+          loadedTopSongs(gLimit - 10, result);
+          updateCoverFlow();
+        });
+      }
     }
   });
   $('.coverflow').coverflow('refresh');
