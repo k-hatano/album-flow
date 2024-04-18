@@ -2,6 +2,7 @@
 body {
 	background: #000;
 	margin: 0px;
+  overflow: hidden;
 }
 
 div#container {
@@ -32,7 +33,35 @@ div#result {
 }
 
 div#result img {
-  min-width: min(50vw, 75vh);
+  min-width: min(50vw, 65vh);
+}
+
+div.album_container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  perspective: 600px;
+}
+
+div#album {
+  position: absolute;
+  background: #FFFFFF88;
+  width: min(50vw, 65vh);
+  height: min(50vw, 65vh);
+  margin: auto;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  transform: translateZ(0px) rotate3d(0, 1, 0, 0deg);
+  transition: transform 1s;
+  z-index: 1;
+  overflow: hidden;
+}
+
+div#album:hover {
+  transform: translateZ(0px) rotate3d(0, 1, 0, 180deg);
+  overflow: hidden;
 }
 
 div.cover {
@@ -45,7 +74,7 @@ div.cover {
   top: 2vh;
   font-size: large;
   color: #FFFFFF;
-  max-width: 55vw;
+  max-width: 48vw;
 }
 
 .song_title {
@@ -62,7 +91,7 @@ div.cover {
   position: absolute;
   color: #FFFFFF;
   width: 100%;
-  bottom: max(calc(50vh - 25vw - 5em), 5em);
+  bottom: max(calc(50vh - 25vw - 5em), 12.5vh);
   text-align: center;
   z-index: 1;
 }

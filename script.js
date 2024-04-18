@@ -146,9 +146,8 @@ function loadedTopSongs(appendFrom, result) {
   $('.coverflow').coverflow({
     select: function(e) {
       updateCoverFlow();
-      if (e.target.__coverflow_frame == gLimit - 3) {
+      if (e.target.__coverflow_frame >= gLimit - 4) {
         gLimit += 10;
-        console.log(gLimit);
         loadTopSongs(gLimit - 10, result => {
           loadedTopSongs(gLimit - 10, result);
           updateCoverFlow();
@@ -157,9 +156,8 @@ function loadedTopSongs(appendFrom, result) {
     },
     change: function(e) {
       updateCoverFlow();
-      if (e.target.__coverflow_frame == gLimit - 3) {
+      if (e.target.__coverflow_frame >= gLimit - 4) {
         gLimit += 10;
-        console.log(gLimit);
         loadTopSongs(gLimit - 10, result => {
           loadedTopSongs(gLimit - 10, result);
           updateCoverFlow();
@@ -167,6 +165,10 @@ function loadedTopSongs(appendFrom, result) {
       }
     }
   });
+  if (appendFrom == 0) {
+    $('.coverflow').coverflow({index: 0});
+    $('.coverflow').coverflow('refresh');
+  }
   $('.coverflow').coverflow('refresh');
   $('.coverflow .cover img').reflect();
 }
