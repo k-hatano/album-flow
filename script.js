@@ -79,6 +79,8 @@ function loadTopSongs(appendFrom, callback) {
   if (appendFrom == 0) {
     $("div.cover").remove();
     $("#loading").attr('class', '');
+    $("#title_link").text("");
+    $("#title_link").attr("href", "javascript:void(0);");
   }
 
   let url = TOPSONGS_URL;

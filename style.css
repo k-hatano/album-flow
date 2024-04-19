@@ -26,14 +26,14 @@ div#result {
   vertical-align: top;
 	color: #FFF;
   overflow: hidden;
-  padding-top: calc(max((100vh - 50vw)/2, 12.5vh));
+  padding-top: calc(max((100vh - 50vw)/2, 15vh));
   background: #000;
   width: 100%;
   min-height: 100%;
 }
 
 div#result img {
-  min-width: min(50vw, 65vh);
+  min-width: min(50vw, 55vh);
 }
 
 div.album_container {
@@ -89,11 +89,17 @@ div.cover {
 
 .title {
   position: absolute;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;  
   color: #FFFFFF;
   width: 100%;
+  height: 3em;
   bottom: max(calc(50vh - 25vw - 5em), 12.5vh);
   text-align: center;
   z-index: 1;
+  max-width: 100%;
+  overflow: hidden;
+  -webkit-line-clamp: 2;
 }
 
 .title a {
