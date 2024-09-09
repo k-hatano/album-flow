@@ -23,11 +23,17 @@
       </div>
       <div id="result" class="coverflow"></div>
     </div>
-<!--     <div class="album_container">
-      <div id="album" class="album"></div>
-    </div> -->
     <select id="storefront" name="storefront"><option id="">Select Storefront</option></select>
-    <span id="title" class="title"><a href="javascript:void(0);" id="title_link" target="_blank"></a></span>
+    <div id="title_area">
+      <div class="button_area"><button id="button_prev">&lt;</button></div>
+      <span id="title" class="title"><a href="javascript:void(0);" id="title_link" target="_blank"></a></span>
+      <div class="button_area"><button id="button_next">&gt;</button></div>
+    </div>
+    <div id="album_container" class="album_container gone">
+      <div id="album" class="album gone">
+        <img id="album_img" src="" />
+      </div>
+    </div>
     <span id="chart_title"></span>
     <script type="text/javascript" charset="utf-8" src="script.js"></script>
   </body>

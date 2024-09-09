@@ -26,7 +26,7 @@ div#result {
   vertical-align: top;
 	color: #FFF;
   overflow: hidden;
-  padding-top: calc(max((100vh - 50vw)/2, 15vh));
+  padding-top: calc(max((100vh - 50vw)/2, 17.5vh));
   background: #000;
   width: 100%;
   min-height: 100%;
@@ -38,34 +38,81 @@ div#result img {
 
 div.album_container {
   position: absolute;
+  background: #00000080;
   width: 100%;
   height: 100%;
   perspective: 600px;
+  opacity: 1.0;
+  z-index: 10;
+}
+
+div.album_container.gone {
+  opacity: 0.0;
+  display: none;
 }
 
 div#album {
   position: absolute;
-  background: #FFFFFF88;
-  width: min(50vw, 65vh);
-  height: min(50vw, 65vh);
+  background: #FFFFFF;
+  width: min(50vw, 55vh);
+  height: min(50vw, 55vh);
   margin: auto;
   left: 0;
   top: 0;
   right: 0;
   bottom: 0;
-  transform: translateZ(0px) rotate3d(0, 1, 0, 0deg);
-  transition: transform 1s;
-  z-index: 1;
+  transform: scale(1.73) rotate3d(0, 1, 0, 180deg);
+  opacity: 1.0;
+  animation: album_gone_to_normal 0.75s ease 0.0s forwards;
+  z-index: 10;
   overflow: hidden;
 }
 
-div#album:hover {
-  transform: translateZ(0px) rotate3d(0, 1, 0, 180deg);
+div#album.gone {
+  transform: scale(1) rotate3d(0, 1, 0, 0deg);
+  opacity: 0.0;
+  animation: album_normal_to_gone 0.75s ease 0.0s forwards;
   overflow: hidden;
+}
+
+@keyframes album_gone_to_normal {
+  0% {
+    transform: scale(1) rotate3d(0, 1, 0, 0deg);
+    opacity: 0.0;
+  }
+  100% {
+    transform: scale(1.73) rotate3d(0, 1, 0, 180deg);
+    opacity: 1.0;
+  }
+}
+
+@keyframes album_normal_to_gone {
+  0% {
+    transform: scale(1.73) rotate3d(0, 1, 0, 180deg);
+    opacity: 1.0;
+  }
+  100% {
+    transform: scale(1) rotate3d(0, 1, 0, 0deg);
+    opacity: 0.0;
+  }
 }
 
 div.cover {
   text-align: center;
+}
+
+div#title_area {
+  display: table;
+  position: fixed;
+  width: 100%;
+  height: auto;
+  background: #88888866;
+  bottom: 0px;
+  z-index: 2;
+}
+
+div#title_area.darken {
+  background: #00000000;
 }
 
 #chart_title {
@@ -88,18 +135,45 @@ div.cover {
 }
 
 .title {
-  position: absolute;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;  
+  display: table-cell;
+  position: relative;
   color: #FFFFFF;
-  width: 100%;
-  height: 3em;
-  bottom: max(calc(50vh - 25vw - 5em), 12.5vh);
+  margin: auto;
+  width: calc(100% - 4em);
+  height: min(24vw, 16vh);
   text-align: center;
-  z-index: 1;
+  vertical-align: middle;
   max-width: 100%;
   overflow: hidden;
   -webkit-line-clamp: 2;
+}
+
+div#title_area div.button_area {
+  display: table-cell;
+  width: 2em;
+  height: min(24vw, 16vh);
+  text-align: center;
+  vertical-align: middle;
+}
+
+div#title_area div.button_area button {
+  margin: auto;
+  border: 0;
+  border-radius: 50%;
+  width: 2em;
+  height: 2em;
+  background: #eeeeee44;
+  color: #eeeeee;
+}
+
+div#title_area div.button_area button:hover {
+  background: #ffffff55;
+  color: #ffffff;
+}
+
+div#title_area div.button_area button:active {
+  background: #ffffff77;
+  color: #ffffff;
 }
 
 .title a {
@@ -112,6 +186,11 @@ select#storefront {
   top: 2vh;
   font-size: large;
   max-width: 40vw;
+}
+
+img#album_img {
+  width: 100%;
+  opacity: 33%;
 }
 
 /* Source from: https://loading.io/css/ */ 

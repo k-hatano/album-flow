@@ -49,6 +49,10 @@ function initialize() {
   });
 
   $("select#storefront").on('change', storefrontChanged);
+  $("button#button_prev").on('click', prevClicked);
+  $("button#button_next").on('click', nextClicked);
+  $("div#title_area").on('click', titleAreaClicked);
+  $("div#album").on('click', albumClicked);
 }
 
 function storefrontChanged(event) {
@@ -59,6 +63,62 @@ function storefrontChanged(event) {
     loadedTopSongs(0, result);
     updateCoverFlow();
   });
+}
+
+function prevClicked(event) {
+  if (event.altKey) {
+    $('.coverflow').coverflow('index', 0);
+  } else {
+    $('.coverflow').coverflow('index', $('.coverflow').coverflow('index') - 1);
+  }
+  
+  event.stopPropagation();
+}
+
+function nextClicked(event) {
+  if (event.altKey) {
+    $('.coverflow').coverflow('index', -1);
+  } else {
+    $('.coverflow').coverflow('index',$('.coverflow').coverflow('index') + 1);
+  }
+  event.stopPropagation();
+}
+
+function titleAreaClicked(event) {
+  if ($("#title_area")[0].className.indexOf('darken') >= 0) {
+    $("#title_area")[0].className = '';
+  } else {
+    $("#title_area")[0].className = 'darken';
+  }
+}
+
+function coverClicked(event) {
+  console.log("coverClicked");
+  if (event.currentTarget && event.currentTarget.className.indexOf("current") >= 0) {
+    var imgSrc = $(".cover.current img").attr("src");
+    if (imgSrc != undefined) {
+      $("#album_img").attr("src", imgSrc);
+    }
+    if ($("#album_container")[0].className.indexOf("gone") >= 0) {
+      $("#album").attr("class", "album");
+      $("#album_container").attr("class", "album_container");
+    } else {
+      $("#album").attr("class", "album gone");
+      $("#album_container").attr("class", "album_container gone");
+    }
+  }
+}
+
+function albumClicked(event) {
+  console.log("albumClicked");
+  console.dir(event);
+  if ($("#album_container")[0].className.indexOf("gone") >= 0) {
+    $("#album").attr("class", "album");
+    $("#album_container").attr("class", "album_container");
+  } else {
+    $("#album").attr("class", "album gone");
+    $("#album_container").attr("class", "album_container gone");
+  }
 }
 
 function loadStorefrontMappings(callback) {
@@ -79,6 +139,7 @@ function loadTopSongs(appendFrom, callback) {
   if (appendFrom == 0) {
     $("div.cover").remove();
     $("#loading").attr('class', '');
+    $("#chart_title").text("");
     $("#title_link").text("");
     $("#title_link").attr("href", "javascript:void(0);");
   }
@@ -173,6 +234,8 @@ function loadedTopSongs(appendFrom, result) {
   }
   $('.coverflow').coverflow('refresh');
   $('.coverflow .cover img').reflect();
+  $("div.cover").on('click', coverClicked);
+  $("div#album_container").on('click', albumClicked);
 }
 
 function updateCoverFlow(e) {
