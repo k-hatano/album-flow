@@ -75,6 +75,30 @@ div#album.gone {
   overflow: hidden;
 }
 
+div#album_back {
+  position: absolute;
+  background: #FFFFFF00;
+  width: min(50vw, 55vh);
+  height: min(50vw, 55vh);
+  margin: auto;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  transform: scale(1.73) rotate3d(0, 1, 0, 360deg);
+  opacity: 1.0;
+  animation: album_back_gone_to_normal 0.75s ease 0.0s forwards;
+  z-index: 10;
+  overflow: hidden;
+}
+
+div#album_back.gone {
+  transform: scale(1) rotate3d(0, 1, 0, 180deg);
+  opacity: 0.0;
+  animation: album_back_normal_to_gone 0.75s ease 0.0s forwards;
+  overflow: hidden;
+}
+
 @keyframes album_gone_to_normal {
   0% {
     transform: scale(1) rotate3d(0, 1, 0, 0deg);
@@ -93,6 +117,28 @@ div#album.gone {
   }
   100% {
     transform: scale(1) rotate3d(0, 1, 0, 0deg);
+    opacity: 0.0;
+  }
+}
+
+@keyframes album_back_gone_to_normal {
+  0% {
+    transform: scale(1) rotate3d(0, 1, 0, 180deg);
+    opacity: 0.0;
+  }
+  100% {
+    transform: scale(1.73) rotate3d(0, 1, 0, 360deg);
+    opacity: 1.0;
+  }
+}
+
+@keyframes album_back_normal_to_gone {
+  0% {
+    transform: scale(1.73) rotate3d(0, 1, 0, 360deg);
+    opacity: 1.0;
+  }
+  100% {
+    transform: scale(1) rotate3d(0, 1, 0, 180deg);
     opacity: 0.0;
   }
 }

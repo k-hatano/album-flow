@@ -95,16 +95,22 @@ function titleAreaClicked(event) {
 function coverClicked(event) {
   console.log("coverClicked");
   if (event.currentTarget && event.currentTarget.className.indexOf("current") >= 0) {
+    var aHref = $(".cover.current a").attr("href");
+    console.log(aHref);
     var imgSrc = $(".cover.current img").attr("src");
     if (imgSrc != undefined) {
       $("#album_img").attr("src", imgSrc);
     }
     if ($("#album_container")[0].className.indexOf("gone") >= 0) {
       $("#album").attr("class", "album");
+      $("#album_back").attr("class", "album_back");
       $("#album_container").attr("class", "album_container");
+      $("#album_back").html(getAlbumIframeHTML(aHref));
     } else {
       $("#album").attr("class", "album gone");
+      $("#album_back").attr("class", "album_back gone");
       $("#album_container").attr("class", "album_container gone");
+      $("#album_back").html("");
     }
   }
 }
@@ -112,13 +118,29 @@ function coverClicked(event) {
 function albumClicked(event) {
   console.log("albumClicked");
   console.dir(event);
+  var aHref = $(".cover.current a").attr("href");
   if ($("#album_container")[0].className.indexOf("gone") >= 0) {
     $("#album").attr("class", "album");
+    $("#album_back").attr("class", "album_back");
     $("#album_container").attr("class", "album_container");
+    $("#album_back").html(getAlbumIframeHTML(aHref));
   } else {
     $("#album").attr("class", "album gone");
+    $("#album_back").attr("class", "album_back gone");
     $("#album_container").attr("class", "album_container gone");
+    $("#album_back").html("");
   }
+}
+
+function getAlbumIframeHTML(aHref) {
+  var iframeSrc = aHref.replace("https://music.apple.com/", "https://embed.music.apple.com/");
+
+  var result = "<iframe allow='autoplay *; encrypted-media *; fullscreen *; clipboard-write' " + 
+    "frameborder='0' height='450' style='width:100%;max-width:660px;overflow:hidden;border-radius:10px;' " +
+    "sandbox='allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation' "+
+    "src='" + iframeSrc + "'></iframe>";
+
+  return result;
 }
 
 function loadStorefrontMappings(callback) {
@@ -139,7 +161,7 @@ function loadTopSongs(appendFrom, callback) {
   if (appendFrom == 0) {
     $("div.cover").remove();
     $("#loading").attr('class', '');
-    $("#chart_title").text("");
+    $("#chart_title").text("").attr("href", "javascript:void(0);");
     $("#title_link").text("");
     $("#title_link").attr("href", "javascript:void(0);");
   }
@@ -179,6 +201,8 @@ function loadedTopSongs(appendFrom, result) {
   $("#loading").attr('class', 'hidden');
   let title = result.getElementsByTagName('title');
   $('#chart_title').text(title[0].textContent);
+  console.dir(result.getElementsByTagName("link"));
+  $('#chart_title').attr("href", result.getElementsByTagName("link")[0].getAttribute("href"));
   const entries = result.getElementsByTagName('entry');
   for (let i = 0; i < entries.length; i++) {
     if (i < appendFrom) {
