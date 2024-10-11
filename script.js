@@ -105,8 +105,12 @@ function coverClicked(event) {
       $("#album").attr("class", "album");
       $("#album_back").attr("class", "album_back");
       $("#album_container").attr("class", "album_container");
-      $("#album_back").html(getAlbumIframeHTML(aHref));
+      setTimeout(function(){
+        $("#album_back").html(getAlbumIframeHTML(aHref));
+      }, 500);
+      // $(".cover.current").attr("class", "cover current hidden");
     } else {
+      $(".cover.current").attr("class", "cover current");
       $("#album").attr("class", "album gone");
       $("#album_back").attr("class", "album_back gone");
       $("#album_container").attr("class", "album_container gone");
@@ -119,17 +123,11 @@ function albumClicked(event) {
   console.log("albumClicked");
   console.dir(event);
   var aHref = $(".cover.current a").attr("href");
-  if ($("#album_container")[0].className.indexOf("gone") >= 0) {
-    $("#album").attr("class", "album");
-    $("#album_back").attr("class", "album_back");
-    $("#album_container").attr("class", "album_container");
-    $("#album_back").html(getAlbumIframeHTML(aHref));
-  } else {
-    $("#album").attr("class", "album gone");
-    $("#album_back").attr("class", "album_back gone");
-    $("#album_container").attr("class", "album_container gone");
-    $("#album_back").html("");
-  }
+  $(".cover.current").attr("class", "cover current");
+  $("#album").attr("class", "album gone");
+  $("#album_back").attr("class", "album_back gone");
+  $("#album_container").attr("class", "album_container gone");
+  $("#album_back").html("");
 }
 
 function getAlbumIframeHTML(aHref) {
@@ -258,6 +256,8 @@ function loadedTopSongs(appendFrom, result) {
   }
   $('.coverflow').coverflow('refresh');
   $('.coverflow .cover img').reflect();
+  $("div.cover").off('click');
+  $("div#album_container").off('click');
   $("div.cover").on('click', coverClicked);
   $("div#album_container").on('click', albumClicked);
 }
