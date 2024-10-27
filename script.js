@@ -42,7 +42,8 @@ function initialize() {
       var option = $("<option></option>").attr({
         "id": result[key].storefrontId,
         "value": result[key].storefrontId,
-        "name": result[key].code
+        "name": result[key].code,
+        "checked": (result[key].storefrontId == SF || result[key].code == SF)
       }).text(result[key].name);
       $("select#storefront").append(option);
     }
@@ -86,9 +87,13 @@ function nextClicked(event) {
 
 function titleAreaClicked(event) {
   if ($("#title_area")[0].className.indexOf('darken') >= 0) {
-    $("#title_area")[0].className = '';
+    $("#title_area").attr('class', '');
+    $(".button_area").attr('class', 'button_area');
+    $("#storefront").attr('class', '');
   } else {
-    $("#title_area")[0].className = 'darken';
+    $("#title_area").attr('class', 'darken');
+    $(".button_area").attr('class', 'button_area hidden');
+    $("#storefront").attr('class', 'hidden');
   }
 }
 
@@ -105,15 +110,17 @@ function coverClicked(event) {
       $("#album").attr("class", "album");
       $("#album_back").attr("class", "album_back");
       $("#album_container").attr("class", "album_container");
+      $("#album_background").attr("class", "album_background");
       setTimeout(function(){
         $("#album_back").html(getAlbumIframeHTML(aHref));
       }, 500);
-      // $(".cover.current").attr("class", "cover current hidden");
+      $(".cover.current").attr("class", "cover current hidden");
     } else {
       $(".cover.current").attr("class", "cover current");
       $("#album").attr("class", "album gone");
       $("#album_back").attr("class", "album_back gone");
       $("#album_container").attr("class", "album_container gone");
+      $("#album_background").attr("class", "album_background gone");
       $("#album_back").html("");
     }
   }
@@ -134,7 +141,7 @@ function getAlbumIframeHTML(aHref) {
   var iframeSrc = aHref.replace("https://music.apple.com/", "https://embed.music.apple.com/");
 
   var result = "<iframe allow='autoplay *; encrypted-media *; fullscreen *; clipboard-write' " + 
-    "frameborder='0' height='450' style='width:100%;max-width:660px;overflow:hidden;border-radius:10px;' " +
+    "frameborder='0' height='450' style='margin: 16px;width:calc(100% - 32px);overflow:hidden;border-radius:10px;' " +
     "sandbox='allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation' "+
     "src='" + iframeSrc + "'></iframe>";
 

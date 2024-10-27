@@ -26,7 +26,7 @@ div#result {
   vertical-align: top;
 	color: #FFF;
   overflow: hidden;
-  padding-top: calc(max((100vh - 50vw)/2, 17.5vh));
+  padding-top: calc(max((100vh - 50vw)/2, 22.5vh));
   background: #000;
   width: 100%;
   min-height: 100%;
@@ -38,16 +38,35 @@ div#result img {
 
 div.album_container {
   position: absolute;
-  background: #00000080;
   width: 100%;
   height: 100%;
+  left: 0;
+  top: 0;
   perspective: 600px;
   opacity: 1.0;
-  z-index: 10;
+  z-index: 11;
+  opacity: 1.0;
 }
 
 div.album_container.gone {
   opacity: 0.0;
+  display: none;
+}
+
+div.album_background {
+  position: absolute;
+  background: #00000080;
+  width: 100%;
+  height: 100%;
+  opacity: 1.0;
+  z-index: 10;
+  animation: album_background_gone_to_normal 0.75s ease 0.0s forwards;
+  opacity: 1.0;
+}
+
+div.album_background.gone {
+  opacity: 0.0;
+  animation: album_background_normal_to_gone 0.75s ease 0.0s forwards;
   display: none;
 }
 
@@ -78,14 +97,15 @@ div#album.gone {
 div#album_back {
   position: absolute;
   background: #FFFFFF00;
-  width: min(50vw, 55vh);
-  height: min(50vw, 55vh);
+  width: min(86.5vw, 95.1vh);
+  height: min(86.5vw, 95.1vh);
   margin: auto;
   left: 0;
   top: 0;
   right: 0;
   bottom: 0;
-  transform: scale(1.73) rotate3d(0, 1, 0, 360deg);
+  padding: 16px;
+  transform: scale(1) rotate3d(0, 1, 0, 360deg);
   opacity: 1.0;
   animation: album_back_gone_to_normal 0.75s ease 0.0s forwards;
   z-index: 10;
@@ -99,10 +119,20 @@ div#album_back.gone {
   overflow: hidden;
 }
 
+div#album img {
+  opacity: 1.0;
+  animation: album_img_gone_to_normal 0.75s ease 0.0s forwards;
+}
+
+div#album.gone img {
+  opacity: 0.5;
+  animation: album_back_normal_to_gone 0.75s ease 0.0s forwards;
+}
+
 @keyframes album_gone_to_normal {
   0% {
     transform: scale(1) rotate3d(0, 1, 0, 0deg);
-    opacity: 0.0;
+    opacity: 1.0;
   }
   100% {
     transform: scale(1.73) rotate3d(0, 1, 0, 180deg);
@@ -121,25 +151,67 @@ div#album_back.gone {
   }
 }
 
-@keyframes album_back_gone_to_normal {
+@keyframes album_background_gone_to_normal {
   0% {
-    transform: scale(1) rotate3d(0, 1, 0, 180deg);
     opacity: 0.0;
   }
   100% {
-    transform: scale(1.73) rotate3d(0, 1, 0, 360deg);
+    opacity: 1.0;
+  }
+}
+
+@keyframes album_background_normal_to_gone {
+  0% {
+    opacity: 1.0;
+  }
+  100% {
+    opacity: 0.0;
+  }
+}
+
+@keyframes album_back_gone_to_normal {
+  0% {
+    transform: scale(0.58) rotate3d(0, 1, 0, 180deg);
+    opacity: 0.0;
+  }
+  100% {
+    transform: scale(1) rotate3d(0, 1, 0, 360deg);
     opacity: 1.0;
   }
 }
 
 @keyframes album_back_normal_to_gone {
   0% {
-    transform: scale(1.73) rotate3d(0, 1, 0, 360deg);
+    transform: scale(1) rotate3d(0, 1, 0, 360deg);
     opacity: 1.0;
   }
   100% {
-    transform: scale(1) rotate3d(0, 1, 0, 180deg);
+    transform: scale(0.58) rotate3d(0, 1, 0, 180deg);
     opacity: 0.0;
+  }
+}
+
+@keyframes album_img_gone_to_normal {
+  0% {
+    opacity: 100%;
+  }
+  33% {
+    opacity: 100%;
+  }
+  67% {
+    opacity: 50%;
+  }
+  100% {
+    opacity: 50%;
+  }
+}
+
+@keyframes album_img_normal_to_gone {
+  0% {
+    opacity: 50%;
+  }
+  100% {
+    opacity: 100%;
   }
 }
 
@@ -162,12 +234,22 @@ div#title_area.darken {
 }
 
 #chart_title {
-  position: fixed;
+  position: relative;
   left: 2vh;
   top: 2vh;
   font-size: large;
   color: #FFFFFF;
-  max-width: 48vw;
+  float: left;
+  max-width: 64vw;
+}
+
+select#storefront {
+  position: relative;
+  right: 2vh;
+  top: 2vh;
+  font-size: large;
+  max-width: 36vw;
+  float: right;
 }
 
 .song_title {
@@ -226,17 +308,9 @@ div#title_area div.button_area button:active {
   color: #FFFFFF;
 }
 
-select#storefront {
-  position: absolute;
-  right: 2vh;
-  top: 2vh;
-  font-size: large;
-  max-width: 40vw;
-}
-
 img#album_img {
   width: 100%;
-  opacity: 33%;
+  /*opacity: 33%;*/
 }
 
 /* Source from: https://loading.io/css/ */ 
