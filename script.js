@@ -10,6 +10,7 @@ let SF = undefined;
 let L = undefined;
 
 let gLimit = 10;
+let gMock = false;
 
 onload = _ => {
   initialize();
@@ -35,6 +36,9 @@ function initialize() {
   if (params['l'] != undefined) {
     L = params['l'];
   }
+  if (params['mock'] != undefined) {
+    gMock = params['mock'] == 'true';
+  }
 
   loadStorefrontMappings(function(result){
     $('select#storefront option[id!=""]').remove();
@@ -49,6 +53,7 @@ function initialize() {
     }
   });
 
+  $('div#song_list_content').text();
   $("select#storefront").on('change', storefrontChanged);
   $("button#button_prev").on('click', prevClicked);
   $("button#button_next").on('click', nextClicked);
@@ -67,10 +72,14 @@ function storefrontChanged(event) {
 }
 
 function prevClicked(event) {
-  if (event.altKey) {
-    $('.coverflow').coverflow('index', 0);
+  if ($('.coverflow').coverflow('index') == 0) {
+    $("div#song_list").attr("class", "");
   } else {
-    $('.coverflow').coverflow('index', $('.coverflow').coverflow('index') - 1);
+    if (event.altKey) {
+      $('.coverflow').coverflow('index', 0);
+    } else {
+      $('.coverflow').coverflow('index', $('.coverflow').coverflow('index') - 1);
+    }
   }
   
   event.stopPropagation();
@@ -113,10 +122,11 @@ function coverClicked(event) {
       $("#album_background").attr("class", "album_background");
       setTimeout(function(){
         $("#album_back").html(getAlbumIframeHTML(aHref));
-      }, 500);
+      }, 750);
       $(".cover.current").attr("class", "cover current hidden");
     } else {
       $(".cover.current").attr("class", "cover current");
+      $("#album").attr("class", "album leaving");
       $("#album").attr("class", "album gone");
       $("#album_back").attr("class", "album_back gone");
       $("#album_container").attr("class", "album_container gone");
@@ -130,11 +140,17 @@ function albumClicked(event) {
   console.log("albumClicked");
   console.dir(event);
   var aHref = $(".cover.current a").attr("href");
-  $(".cover.current").attr("class", "cover current");
-  $("#album").attr("class", "album gone");
+  $(".cover.current").attr("class", "cover current hidden");
   $("#album_back").attr("class", "album_back gone");
-  $("#album_container").attr("class", "album_container gone");
   $("#album_back").html("");
+  $("#album").attr("class", "album leaving");
+  $("#album").attr("class", "album gone");
+  $("#album_background").attr("class", "album_background leaving");
+  $("#album_background").attr("class", "album_background gone");
+  setTimeout(function(){
+    $("#album_container").attr("class", "album_container gone");
+    $(".cover.current").attr("class", "cover current");
+  }, 750);
 }
 
 function getAlbumIframeHTML(aHref) {
@@ -169,6 +185,7 @@ function loadTopSongs(appendFrom, callback) {
     $("#chart_title").text("").attr("href", "javascript:void(0);");
     $("#title_link").text("");
     $("#title_link").attr("href", "javascript:void(0);");
+    $('div#song_list_content').text("");
   }
 
   let url = TOPSONGS_URL;
@@ -188,6 +205,9 @@ function loadTopSongs(appendFrom, callback) {
   if (gLimit > 10) {
     url = url.replace("/limit=10/", "/limit=" + gLimit + "/");
   }
+  if (gMock) {
+    url = 'mock.xml';
+  }
   console.log(url);
 
   jQuery.ajax({
@@ -195,6 +215,7 @@ function loadTopSongs(appendFrom, callback) {
     url:url,
     method: "GET"
   }).then(result => {
+    console.log(result);
     if (callback != undefined) {
       callback(result);
     }
@@ -217,6 +238,8 @@ function loadedTopSongs(appendFrom, result) {
     let coverElem = $('<div class="cover"></div>');
     let anchorElem = $('<a></a>').attr('target', '_blank');
     let titleElem = $('<a target="_blank" class="song_title"></a>');
+    let songListItemScript = "javascript:$(\'.coverflow\').coverflow(\'index\', " + i +")";
+    let songListItemAnchor = $("<a href='javascript:void(0);'></a>").attr("href", songListItemScript);
     const children = Array.from(entries[i].children);
     children.forEach(child => {
       if (child.nodeName == 'id') {
@@ -226,6 +249,7 @@ function loadedTopSongs(appendFrom, result) {
       if (child.nodeName == 'title') {
         $(imgElem).attr('name', child.textContent);
         // $(titleElem).text(child.textContent);
+        songListItemAnchor.text(child.textContent);
       }
       if (child.nodeName == 'im:image') {
         $(imgElem).attr('src', child.textContent);
@@ -234,6 +258,9 @@ function loadedTopSongs(appendFrom, result) {
     $(anchorElem).append(imgElem);
     $(coverElem).append(imgElem).append(titleElem);
     $('#result').append(coverElem);
+
+    let songListItem = $("<li></li>").append(songListItemAnchor);
+    $('div#song_list_content').append(songListItem);
   }
   $('.coverflow').coverflow({
     select: function(e) {
@@ -273,4 +300,14 @@ function updateCoverFlow(e) {
   $("#title_link").text($(".cover.current img").attr("name"));
   $("#title_link").attr("href", $(".cover.current a").attr("href"));
   $('.coverflow .cover img').reflect();
+
+  if ($(".coverflow").coverflow("index") == 0) {
+    $("#button_prev").text("≡");
+  } else {
+    $("#button_prev").text("<");
+  }
+}
+
+function closeSongList() {
+  $("div#song_list").attr("class", "gone");
 }

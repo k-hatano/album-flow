@@ -28,7 +28,7 @@
       <select id="storefront" name="storefront"><option id="">Select Storefront</option></select>
     </div>
     <div id="title_area">
-      <div class="button_area"><button id="button_prev">&lt;</button></div>
+      <div class="button_area"><button id="button_prev">≡</button></div>
       <span id="title" class="title"><a href="javascript:void(0);" id="title_link" target="_blank"></a></span>
       <div class="button_area"><button id="button_next">&gt;</button></div>
     </div>
@@ -39,6 +39,14 @@
         <img id="album_img" src="" />
       </div>
       <div id="album_back" class="album_back gone">
+      </div>
+    </div>
+    <div id="song_list" class="gone hidden"> 
+      <div id="song_list_button_area">
+        <button onclick="closeSongList()">Close</button>
+      </div>
+      <div id="song_list_content">
+        &nbsp;
       </div>
     </div>
     <script type="text/javascript" charset="utf-8" src="script.js"></script>
