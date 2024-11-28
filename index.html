@@ -25,12 +25,15 @@
     </div>
     <div id="chart_area">
       <a href="javascript:void(0);" id="chart_title" target="_blank"></a>&nbsp;&nbsp;
-      <select id="storefront" name="storefront"><option id="">Select Storefront</option></select>
+      <div id="chart_area_right_block">
+        <select id="storefront" name="storefront"><option id="">Select Storefront</option></select>
+        <button class="circle_button" id="toggle_song_list" title="Show Song List">≡</button>
+      </div>
     </div>
     <div id="title_area">
-      <div class="button_area"><button id="button_prev">≡</button></div>
+      <div class="button_area"><button class="circle_button" id="button_prev">≡</button></div>
       <span id="title" class="title"><a href="javascript:void(0);" id="title_link" target="_blank"></a></span>
-      <div class="button_area"><button id="button_next">&gt;</button></div>
+      <div class="button_area"><button class="circle_button" id="button_next">&gt;</button></div>
     </div>
     <div id="album_container" class="album_container gone">
       <div id="album_background" class="album_background gone">
@@ -43,10 +46,13 @@
     </div>
     <div id="song_list" class="gone hidden"> 
       <div id="song_list_button_area">
-        <button onclick="closeSongList()">Close</button>
+        <button id="close_song_list">Close</button>
       </div>
-      <div id="song_list_content">
+      <div class="song_list_content" id="song_list_content">
         &nbsp;
+      </div>
+      <div class="song_list_content" id="song_list_content_after">
+        <a href="javascript:loadRest();" id="load_rest">Load rest</a>
       </div>
     </div>
     <script type="text/javascript" charset="utf-8" src="script.js"></script>

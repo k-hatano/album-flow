@@ -329,15 +329,6 @@ div#title_area.darken {
   max-width: 64vw;
 }
 
-select#storefront {
-  position: relative;
-  right: 2vh;
-  top: 2vh;
-  font-size: large;
-  max-width: 36vw;
-  float: right;
-}
-
 .song_title {
   position: absolute;
   display: contents;
@@ -362,7 +353,7 @@ select#storefront {
   -webkit-line-clamp: 2;
 }
 
-div#title_area div.button_area {
+div.button_area {
   display: table-cell;
   width: 2em;
   height: min(24vw, 16vh);
@@ -370,7 +361,7 @@ div#title_area div.button_area {
   vertical-align: middle;
 }
 
-div#title_area div.button_area button {
+button.circle_button {
   margin: auto;
   border: 0;
   border-radius: 50%;
@@ -380,14 +371,34 @@ div#title_area div.button_area button {
   color: #eeeeee;
 }
 
-div#title_area div.button_area button:hover {
+button.circle_button:hover {
   background: #ffffff55;
   color: #ffffff;
 }
 
-div#title_area div.button_area button:active {
+button.circle_button:active {
   background: #ffffff77;
   color: #ffffff;
+}
+
+div#chart_area div#chart_area_right_block {
+  position: relative;
+  float: right;
+  top: 2vh;
+  right: 2vh;
+}
+
+div#chart_area button.circle_button {
+  position: relative;
+  float: right;
+}
+
+select#storefront {
+  position: relative;
+  font-size: large;
+  max-width: 36vw;
+  float: right;
+  margin-left: 8px;
 }
 
 .title a {
@@ -508,7 +519,7 @@ div#song_list_button_area {
   padding: 8px 8px 0px 8px;
 }
 
-div#song_list_content {
+div.song_list_content {
   max-width: min(480px, 100vw);
   max-height: calc(100vh - 40px);
   overflow-y: auto;
@@ -516,7 +527,7 @@ div#song_list_content {
   padding: 0px 8px 8px 8px;
 }
 
-div#song_list_content li {
+div.song_list_content li {
   list-style-type: decimal;
   max-width: min(420px, 100vw);
   white-space: nowrap;
@@ -525,7 +536,7 @@ div#song_list_content li {
   counter-increment: table-ol;
 }
 
-div#song_list_content li:before {
+div.song_list_content li:before {
   color: white;
   content: counter(table-ol) ".";
   display: table-cell;
@@ -533,7 +544,7 @@ div#song_list_content li:before {
   padding-right: 4px;
 }
 
-div#song_list_content a {
+div.song_list_content a {
   display: inline-block;
   position: relative;
   color: white;
