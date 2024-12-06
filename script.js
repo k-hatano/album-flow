@@ -17,6 +17,9 @@ let gPressingNext = false;
 let gRefusePrev = false;
 let gRefuseNext = false;
 
+let gSongListPressing = false;
+let gSongListTouchX = false;
+
 onload = _ => {
   initialize();
   loadTopSongs(0, result => {
@@ -70,6 +73,10 @@ function initialize() {
   $("button#button_next").on('click', nextClicked);
   $("button#close_song_list").on('click', closeSongList);
   $("button#toggle_song_list").on('click', toggleSongList);
+  $("div#song_list").on('mousedown', songListMouseDown);
+  $("div#song_list").on('mouseup', songListMouseUp);
+  $("div#song_list").on('mouseleave', songListMouseUp);
+  $("div#song_list").on('mousemove', songListMouseMove);
   $("div#title_area").on('click', titleAreaClicked);
   $("div#album").on('click', albumClicked);
 }
@@ -155,6 +162,22 @@ function nextPressing() {
   gRefuseNext = true;
   $('.coverflow').coverflow('index',$('.coverflow').coverflow('index') + 1);
   setTimeout(nextPressing, 250);
+}
+
+function songListMouseDown(event) {
+  gSongListPressing = true;
+  gSongListTouchX = event.clientX;
+}
+
+function songListMouseUp(event) {
+  gSongListPressing = false;
+  
+}
+
+function songListMouseMove(event) {
+  if (gSongListPressing && gSongListTouchX - event.clientX > 64) {
+    closeSongList();
+  }
 }
 
 function titleAreaClicked(event) {
@@ -256,6 +279,7 @@ function loadTopSongs(appendFrom, callback) {
     $("#title_link").attr("href", "javascript:void(0);");
     $('div#song_list_content').text("");
   }
+  $("#load_rest").text("Loading...");
 
   let url = TOPSONGS_URL;
   if (location.href.indexOf('https://') == 0) {
@@ -293,6 +317,8 @@ function loadTopSongs(appendFrom, callback) {
 
 function loadedTopSongs(appendFrom, result) {
   console.dir(result);
+  let rest = $("#load_rest");
+  $("#load_rest").remove();
   $("#loading").attr('class', 'hidden');
   let title = result.getElementsByTagName('title');
   $('#chart_title').text(title[0].textContent);
@@ -363,15 +389,14 @@ function loadedTopSongs(appendFrom, result) {
   $("div#album_container").off('click');
   $("div.cover").on('click', coverClicked);
   $("div#album_container").on('click', albumClicked);
+  $("#song_list_content").append($(rest).text("Load rest"));
 }
 
 function loadRest() {
   gLimit += 10;
-  $("#load_rest").text("Loading...");
   loadTopSongs(gLimit - 10, result => {
     loadedTopSongs(gLimit - 10, result);
     updateCoverFlow();
-    $("#load_rest").text("Load rest");
   });
 }
 
