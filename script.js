@@ -66,10 +66,14 @@ function initialize() {
   $("button#button_prev").on('mousedown', prevMouseDown);
   $("button#button_prev").on('mouseup', prevMouseUp);
   $("button#button_prev").on('mouseleave', prevMouseUp);
+  $("button#button_prev").on('touchstart', prevMouseDown);
+  $("button#button_prev").on('touchend', prevMouseUp);
   $("button#button_prev").on('click', prevClicked);
   $("button#button_next").on('mousedown', nextMouseDown);
   $("button#button_next").on('mouseup', nextMouseUp);
   $("button#button_next").on('mouseleave', nextMouseUp);
+  $("button#button_next").on('touchstart', nextMouseDown);
+  $("button#button_next").on('touchend', nextMouseUp);
   $("button#button_next").on('click', nextClicked);
   $("button#close_song_list").on('click', closeSongList);
   $("button#toggle_song_list").on('click', toggleSongList);
@@ -77,6 +81,9 @@ function initialize() {
   $("div#song_list").on('mouseup', songListMouseUp);
   $("div#song_list").on('mouseleave', songListMouseUp);
   $("div#song_list").on('mousemove', songListMouseMove);
+  $("div#song_list").on('touchstart', songListMouseDown);
+  $("div#song_list").on('touchend', songListMouseUp);
+  $("div#song_list").on('touchmove', songListMouseMove);
   $("div#title_area").on('click', titleAreaClicked);
   $("div#album").on('click', albumClicked);
 }
@@ -92,6 +99,7 @@ function storefrontChanged(event) {
 }
 
 function prevClicked(event) {
+  console.log("prevClicked");
   if (gRefusePrev) {
     gRefusePrev = false;
     event.stopPropagation();
@@ -111,26 +119,30 @@ function prevClicked(event) {
 }
 
 function prevMouseDown(event) {
+  console.log("prevMouseDown");
   gPressingPrev = true;
-  setTimeout(prevPressing, 1000);
+  prevPressing();
   event.stopPropagation();
 }
 
 function prevMouseUp(event) {
+  console.log("prevMouseUp");
   gPressingPrev = false;
   event.stopPropagation();
 }
 
 function prevPressing() {
+  console.log("prevPressing");
   if (gPressingPrev == false || parseInt($('.coverflow').coverflow('index')) == 0) {
     return;
   }
   gRefusePrev = true;
   $('.coverflow').coverflow('index',$('.coverflow').coverflow('index') - 1);
-  setTimeout(prevPressing, 250);
+  setTimeout(prevPressing, 500);
 }
 
 function nextClicked(event) {
+  console.log("nextClicked");
   if (gRefuseNext) {
     gRefuseNext = false;
     event.stopPropagation();
@@ -145,28 +157,38 @@ function nextClicked(event) {
 }
 
 function nextMouseDown(event) {
+  console.log("nextMouseDown");
   gPressingNext = true;
-  setTimeout(nextPressing, 1000);
+  nextPressing();
   event.stopPropagation();
 }
 
 function nextMouseUp(event) {
+  console.log("nextMouseUp");
   gPressingNext = false;
   event.stopPropagation();
 }
 
 function nextPressing() {
+  console.log("nextPressing");
   if (gPressingNext == false) {
     return;
   }
   gRefuseNext = true;
   $('.coverflow').coverflow('index',$('.coverflow').coverflow('index') + 1);
-  setTimeout(nextPressing, 250);
+  setTimeout(nextPressing, 500);
 }
 
 function songListMouseDown(event) {
+  let x = undefined;
+  if (event.clientX != undefined) {
+    x = event.clientX;
+  }
+  if (event.originalEvent.touches != undefined && event.originalEvent.touches[0] != undefined && event.originalEvent.touches[0].clientX != undefined) {
+    x = event.originalEvent.touches[0].clientX;
+  }
   gSongListPressing = true;
-  gSongListTouchX = event.clientX;
+  gSongListTouchX = x;
 }
 
 function songListMouseUp(event) {
@@ -175,7 +197,14 @@ function songListMouseUp(event) {
 }
 
 function songListMouseMove(event) {
-  if (gSongListPressing && gSongListTouchX - event.clientX > 64) {
+  let x = undefined;
+  if (event.clientX != undefined) {
+    x = event.clientX;
+  }
+  if (event.originalEvent.touches != undefined && event.originalEvent.touches[0] != undefined && event.originalEvent.touches[0].clientX != undefined) {
+    x = event.originalEvent.touches[0].clientX;
+  }
+  if (gSongListPressing && gSongListTouchX - x > 64) {
     closeSongList();
   }
 }
@@ -249,7 +278,7 @@ function getAlbumIframeHTML(aHref) {
   var iframeSrc = aHref.replace("https://music.apple.com/", "https://embed.music.apple.com/");
 
   var result = "<iframe allow='autoplay *; encrypted-media *; fullscreen *; clipboard-write' " + 
-    "frameborder='0' height='450' style='margin: 16px;width:calc(100% - 32px);overflow:hidden;border-radius:10px;' " +
+    "frameborder='0' height='450' style='margin: 16px;width:calc(100% - 32px);overflow:hidden;border-radius:10px; z-index:1000;' " +
     "sandbox='allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation' "+
     "src='" + iframeSrc + "'></iframe>";
 
@@ -274,6 +303,7 @@ function loadTopSongs(appendFrom, callback) {
   if (appendFrom == 0) {
     $("div.cover").remove();
     $("#loading").attr('class', '');
+    $("#chart_title_button_area").text("");
     $("#chart_title").text("").attr("href", "javascript:void(0);");
     $("#title_link").text("");
     $("#title_link").attr("href", "javascript:void(0);");
@@ -317,10 +347,11 @@ function loadTopSongs(appendFrom, callback) {
 
 function loadedTopSongs(appendFrom, result) {
   console.dir(result);
-  let rest = $("#load_rest");
+  let rest = $("<a href='javascript:loadRest();' id='load_rest'>Load rest</a>");
   $("#load_rest").remove();
   $("#loading").attr('class', 'hidden');
   let title = result.getElementsByTagName('title');
+  $('#chart_title_button_area').text(title[0].textContent);
   $('#chart_title').text(title[0].textContent);
   console.dir(result.getElementsByTagName("link"));
   $('#chart_title').attr("href", result.getElementsByTagName("link")[0].getAttribute("href"));

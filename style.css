@@ -3,6 +3,7 @@ body {
 	background: #000;
 	margin: 0px;
   overflow: hidden;
+  user-select: none;
 }
 
 div#container {
@@ -327,6 +328,7 @@ div#title_area.darken {
   color: #FFFFFF;
   float: left;
   max-width: 64vw;
+  padding-bottom: 6px;
 }
 
 .song_title {
@@ -369,6 +371,11 @@ button.circle_button {
   height: 2em;
   background: #eeeeee44;
   color: #eeeeee;
+  user-select: none;
+  text-align: center;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
 }
 
 button.circle_button:hover {
@@ -386,6 +393,7 @@ div#chart_area div#chart_area_right_block {
   float: right;
   top: 2vh;
   right: 2vh;
+  padding-left: 36px;
 }
 
 div#chart_area button.circle_button {
@@ -393,10 +401,14 @@ div#chart_area button.circle_button {
   float: right;
 }
 
+button.right {
+  float: right;
+}
+
 select#storefront {
   position: relative;
   font-size: large;
-  max-width: 36vw;
+/*  max-width: 36vw;*/
   float: right;
   margin-left: 8px;
 }
@@ -494,7 +506,7 @@ img#album_img {
 div#song_list {
   display: table;
   position: fixed;
-  width: min(480px, 100vw);
+  width: min(480px, calc(100vw - 16px));
   height: 100%;
   max-height: 100%;
   background: #88888866;
@@ -503,6 +515,7 @@ div#song_list {
   z-index: 10;
   backdrop-filter: blur(8px);
   animation: song_list_gone_to_normal 0.5s ease 0.0s forwards;
+  color: #FFFFFF;
 }
 
 div#song_list.hidden {
@@ -520,8 +533,8 @@ div#song_list_button_area {
 }
 
 div.song_list_content {
-  max-width: min(480px, 100vw);
-  max-height: calc(100vh - 40px);
+  max-width: min(480px, calc(100vw - 16px));
+  max-height: calc(100vh - 57px);
   overflow-y: auto;
   overflow-x: hidden;
   padding: 0px 8px 8px 8px;
@@ -529,8 +542,10 @@ div.song_list_content {
 
 div.song_list_content li {
   list-style-type: decimal;
-  max-width: min(420px, 100vw);
+  max-width: min(420px, calc(100vw - 76px));
+  overflow: hidden;
   white-space: nowrap;
+  text-overflow: ellipsis;
   color: white;
   display: table-row;
   counter-increment: table-ol;
@@ -541,6 +556,7 @@ div.song_list_content li:before {
   content: counter(table-ol) ".";
   display: table-cell;
   text-align: right;
+  vertical-align: middle;
   padding-right: 4px;
 }
 
@@ -549,8 +565,13 @@ div.song_list_content a {
   position: relative;
   color: white;
   white-space: nowrap;
+  overflow: hidden;
   text-overflow: ellipsis;
   padding: 1px;
+}
+
+div#song_list hr {
+  border-bottom: 0;
 }
 
 @keyframes song_list_gone_to_normal {
@@ -569,4 +590,8 @@ div.song_list_content a {
   100% {
     left: -500px;
   }
+}
+
+#load_rest_tmp {
+  display: none;
 }
