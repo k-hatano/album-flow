@@ -278,7 +278,7 @@ function getAlbumIframeHTML(aHref) {
   var iframeSrc = aHref.replace("https://music.apple.com/", "https://embed.music.apple.com/");
 
   var result = "<iframe allow='autoplay *; encrypted-media *; fullscreen *; clipboard-write' " + 
-    "frameborder='0' height='450' style='margin: 16px;width:calc(100% - 32px);overflow:hidden;border-radius:10px; z-index:1000;' " +
+    "frameborder='0' height='450' style='margin: 16px;width:calc(100% - 32px);max-height:calc(100% - 32px);overflow:hidden;border-radius:10px; z-index:1000;' " +
     "sandbox='allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation' "+
     "src='" + iframeSrc + "'></iframe>";
 
@@ -347,7 +347,7 @@ function loadTopSongs(appendFrom, callback) {
 
 function loadedTopSongs(appendFrom, result) {
   console.dir(result);
-  let rest = $("<a href='javascript:loadRest();' id='load_rest'>Load rest</a>");
+  let rest = $("<a href='javascript:loadRest();' id='load_rest'>Load more</a>");
   $("#load_rest").remove();
   $("#loading").attr('class', 'hidden');
   let title = result.getElementsByTagName('title');
@@ -420,7 +420,7 @@ function loadedTopSongs(appendFrom, result) {
   $("div#album_container").off('click');
   $("div.cover").on('click', coverClicked);
   $("div#album_container").on('click', albumClicked);
-  $("#song_list_content").append($(rest).text("Load rest"));
+  $("#song_list_content").append($(rest).text("Load more"));
 }
 
 function loadRest() {
