@@ -63,18 +63,21 @@ function initialize() {
 
   $('div#song_list_content').text();
   $("select#storefront").on('change', storefrontChanged);
+
   $("button#button_prev").on('mousedown', prevMouseDown);
   $("button#button_prev").on('mouseup', prevMouseUp);
   $("button#button_prev").on('mouseleave', prevMouseUp);
   $("button#button_prev").on('touchstart', prevMouseDown);
   $("button#button_prev").on('touchend', prevMouseUp);
   $("button#button_prev").on('click', prevClicked);
+
   $("button#button_next").on('mousedown', nextMouseDown);
   $("button#button_next").on('mouseup', nextMouseUp);
   $("button#button_next").on('mouseleave', nextMouseUp);
   $("button#button_next").on('touchstart', nextMouseDown);
   $("button#button_next").on('touchend', nextMouseUp);
   $("button#button_next").on('click', nextClicked);
+
   $("button#close_song_list").on('click', closeSongList);
   $("button#toggle_song_list").on('click', toggleSongList);
   $("div#song_list").on('mousedown', songListMouseDown);
@@ -115,6 +118,7 @@ function prevClicked(event) {
     }
   }
   
+  event.preventDefault();
   event.stopPropagation();
 }
 
@@ -122,12 +126,14 @@ function prevMouseDown(event) {
   console.log("prevMouseDown");
   gPressingPrev = true;
   prevPressing();
+  event.preventDefault();
   event.stopPropagation();
 }
 
 function prevMouseUp(event) {
   console.log("prevMouseUp");
   gPressingPrev = false;
+  event.preventDefault();
   event.stopPropagation();
 }
 
@@ -153,6 +159,7 @@ function nextClicked(event) {
   } else {
     $('.coverflow').coverflow('index',$('.coverflow').coverflow('index') + 1);
   }
+  event.preventDefault();
   event.stopPropagation();
 }
 
@@ -160,12 +167,14 @@ function nextMouseDown(event) {
   console.log("nextMouseDown");
   gPressingNext = true;
   nextPressing();
+  event.preventDefault();
   event.stopPropagation();
 }
 
 function nextMouseUp(event) {
   console.log("nextMouseUp");
   gPressingNext = false;
+  event.preventDefault();
   event.stopPropagation();
 }
 
@@ -197,6 +206,7 @@ function songListMouseUp(event) {
 }
 
 function songListMouseMove(event) {
+  console.log('songListMouseMove');
   let x = undefined;
   if (event.clientX != undefined) {
     x = event.clientX;
@@ -303,7 +313,6 @@ function loadTopSongs(appendFrom, callback) {
   if (appendFrom == 0) {
     $("div.cover").remove();
     $("#loading").attr('class', '');
-    $("#chart_title_button_area").text("");
     $("#chart_title").text("").attr("href", "javascript:void(0);");
     $("#title_link").text("");
     $("#title_link").attr("href", "javascript:void(0);");
@@ -345,13 +354,17 @@ function loadTopSongs(appendFrom, callback) {
   });
 }
 
+function cancelEvent(event) {
+  event.stopPropagation();
+  // event.preventDefault();
+}
+
 function loadedTopSongs(appendFrom, result) {
   console.dir(result);
-  let rest = $("<a href='javascript:loadRest();' id='load_rest'>Load more</a>");
-  $("#load_rest").remove();
+  let rest = $("<div class='song_list_content song_list_content_after' id='song_list_content_after'><a href='javascript:loadRest();' id='load_rest'>Load more</a></div>");
+  $("#song_list_content_after").remove();
   $("#loading").attr('class', 'hidden');
   let title = result.getElementsByTagName('title');
-  $('#chart_title_button_area').text(title[0].textContent);
   $('#chart_title').text(title[0].textContent);
   console.dir(result.getElementsByTagName("link"));
   $('#chart_title').attr("href", result.getElementsByTagName("link")[0].getAttribute("href"));
@@ -365,7 +378,7 @@ function loadedTopSongs(appendFrom, result) {
     let anchorElem = $('<a></a>').attr('target', '_blank');
     let titleElem = $('<a target="_blank" class="song_title"></a>');
     let songListItemScript = "javascript:$(\'.coverflow\').coverflow(\'index\', " + i +")";
-    let songListItemAnchor = $("<a href='javascript:void(0);'></a>").attr("href", songListItemScript);
+    let songListItemAnchor = $("<a href='javascript:void(0);' onclick='cancelEvent(event)' onmousedown='cancelEvent(event)' ontouchstart='cancelEvent(event)' ontouchmove='cancelEvent(event)'></a>").attr("href", songListItemScript);
     const children = Array.from(entries[i].children);
     children.forEach(child => {
       if (child.nodeName == 'id') {
@@ -420,7 +433,7 @@ function loadedTopSongs(appendFrom, result) {
   $("div#album_container").off('click');
   $("div.cover").on('click', coverClicked);
   $("div#album_container").on('click', albumClicked);
-  $("#song_list_content").append($(rest).text("Load more"));
+  $("#song_list_content").append($(rest));
 }
 
 function loadRest() {

@@ -26,7 +26,6 @@
     <div id="chart_area">
       <a href="javascript:void(0);" id="chart_title" target="_blank"></a>&nbsp;&nbsp;
       <div id="chart_area_right_block">
-        <select id="storefront" name="storefront"><option id="">Select Storefront</option></select>
         <button class="circle_button" id="toggle_song_list" title="Show Song List">≡</button>
       </div>
     </div>
@@ -46,15 +45,13 @@
     </div>
     <div id="song_list" class="gone hidden"> 
       <div id="song_list_button_area">
-        <span id="chart_title_button_area"></span>
+        <label for="storefront" id="storefront_label">Storefront:</label>
+        <select id="storefront" name="storefront"><option id="">Select Storefront</option></select>
         <button class="circle_button right" id="close_song_list">✕</button>
       </div>
       <hr />
       <div class="song_list_content" id="song_list_content">
         &nbsp;
-      </div>
-      <div class="song_list_content song_list_content_after" id="song_list_content_after">
-        <a href='javascript:loadRest();' id='load_rest'>Load rest</a>
       </div>
     </div>
     <script type="text/javascript" charset="utf-8" src="script.js"></script>

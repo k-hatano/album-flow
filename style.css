@@ -380,6 +380,9 @@ button.circle_button {
   border-radius: 50%;
   width: 2em;
   height: 2em;
+  margin: 1px;
+  padding: 0;
+  font-size: medium;
   background: #eeeeee44;
   color: #eeeeee;
   user-select: none;
@@ -387,6 +390,10 @@ button.circle_button {
   -moz-user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
+}
+
+div.button_area button.circle_button {
+  margin: 6px;
 }
 
 button.circle_button:hover {
@@ -416,11 +423,14 @@ button.right {
   float: right;
 }
 
+#storefront_label {
+/*  float: left;*/
+}
+
 select#storefront {
   position: relative;
   font-size: large;
 /*  max-width: 36vw;*/
-  float: right;
   margin-left: 8px;
 }
 
@@ -539,13 +549,14 @@ div#song_list.gone {
 }
 
 div#song_list_button_area {
-  height: 24px;
+  height: 32px;
   padding: 8px 8px 0px 8px;
+  line-height: 32px;
 }
 
 div.song_list_content {
   max-width: min(480px, calc(100vw - 16px));
-  max-height: calc(100vh - 57px);
+  max-height: calc(100vh - 65px);
   overflow-y: auto;
   overflow-x: hidden;
   padding: 0px 8px 8px 8px;
@@ -582,7 +593,7 @@ div.song_list_content a {
 }
 
 div.song_list_content_after {
-  padding: 0px 8px 32px 8px;
+  padding: 0px 8px 8px 0px;
 }
 
 div#song_list hr {
