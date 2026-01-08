@@ -241,6 +241,7 @@ function coverClicked(event) {
   console.log("coverClicked");
   if (event.currentTarget && event.currentTarget.className.indexOf("current") >= 0) {
     var aHref = $(".cover.current a").attr("href");
+    var aHrefTitle = $(".cover.current img").attr("name");
     console.log(aHref);
     var imgSrc = $(".cover.current img").attr("src");
     if (imgSrc != undefined) {
@@ -252,7 +253,7 @@ function coverClicked(event) {
       $("#album_container").attr("class", "album_container");
       $("#album_background").attr("class", "album_background");
       setTimeout(function(){
-        $("#album_back").html(getAlbumIframeHTML(aHref));
+        $("#album_back").html(getAlbumIframeHTML(aHref, aHrefTitle));
       }, 750);
       $(".cover.current").attr("class", "cover current hidden");
     } else {
@@ -284,13 +285,17 @@ function albumClicked(event) {
   }, 750);
 }
 
-function getAlbumIframeHTML(aHref) {
+function getAlbumIframeHTML(aHref, albumName) {
   var iframeSrc = aHref.replace("https://music.apple.com/", "https://embed.music.apple.com/");
 
-  var result = "<iframe allow='autoplay *; encrypted-media *; fullscreen *; clipboard-write' " + 
+  var result = "<iframe id='itunes_frame' allow='autoplay *; encrypted-media *; fullscreen *; clipboard-write' " + 
     "frameborder='0' height='450' style='margin: 16px;width:calc(100% - 32px);max-height:calc(100% - 32px);overflow:hidden;border-radius:10px; z-index:1000;' " +
     "sandbox='allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation' "+
     "src='" + iframeSrc + "'></iframe>";
+
+  if (albumName != undefined) {
+    result += "<div style='position: absolute; right: 24px; bottom: 24px; text-align: right; color: #111111; font-size: small;'><a href='javascript:void(0);' onclick='toggleIframe(event);return false;' style='color: #111111;'>" + albumName + "</a></div>"
+  }
 
   return result;
 }
@@ -467,3 +472,14 @@ function toggleSongList() {
 function closeSongList() {
   $("div#song_list").attr("class", "gone");
 }
+
+function toggleIframe(event) {
+  event.stopPropagation();
+  event.preventDefault();
+
+  let iframeSrc = $("iframe#itunes_frame").attr('src');
+  if (iframeSrc.indexOf('?i=') >= 0) {
+    $("iframe#itunes_frame").attr('src', iframeSrc.substring(0, iframeSrc.indexOf('?i=')));
+  }
+}
+
